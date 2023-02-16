@@ -11,7 +11,7 @@ services:
     environment:
       MESSAGE_BROKER_URL: 'amqp://master-rabbitmq:5672'
     networks:
-      - user-network
+      - motel-network
 
   node1-rabbitmq:
     image: rabbitmq:3-management
@@ -28,8 +28,8 @@ services:
       - '15672:15672'
       - '25672:25672'
     networks:
-      - user-network
+      - motel-network
 
 networks:
-  user-network:
+  motel-network:
     driver: bridge
