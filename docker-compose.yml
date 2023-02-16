@@ -1,0 +1,35 @@
+services:
+  user-app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 3002:3002
+    working_dir: /app/users
+    volumes:
+      - ./:/app/users
+      - ../constants:/app/constants
+    environment:
+      MESSAGE_BROKER_URL: 'amqp://master-rabbitmq:5672'
+    networks:
+      - user-network
+
+  node1-rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    volumes:
+      - ./storage/master-rabbitmq:/var/lib/rabbitmq
+    ports:
+      - '4369:4369'
+      - '5671:5671'
+      - '5672:5672'
+      - '15671:15671'
+      - '15672:15672'
+      - '25672:25672'
+    networks:
+      - user-network
+
+networks:
+  user-network:
+    driver: bridge
